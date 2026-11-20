@@ -1,0 +1,11 @@
+{
+  "name": "garpitx-ai",
+  "version": "2.0.0",
+  "description": "GARPITX AI v2 - Modern Glassmorphic AI Assistant powered by CrowLLM",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}

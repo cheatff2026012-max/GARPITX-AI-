@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GARPITX AI — Next-Gen CrowLLM Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Marked.js untuk rendering Markdown & Highlight.js untuk sintaks kode -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+  <!-- Ambient Background Glows -->
+  <div class="ambient-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Mobile Sidebar Overlay -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="logo-orb">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>GARPITX AI</h1>
+            <span class="badge-model">CrowLLM Engine</span>
+          </div>
+        </div>
+        <button id="close-sidebar-btn" class="icon-btn mobile-only" aria-label="Tutup Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <button id="new-chat-btn" class="btn-new-chat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <span>Obrolan Baru</span>
+      </button>
+
+      <div class="history-section">
+        <div class="section-label">RIWAYAT SESI</div>
+        <div id="history-list" class="history-list">
+          <!-- Riwayat obrolan dirender otomatis via JS -->
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="engine-card">
+          <div class="engine-status">
+            <span class="pulse-dot"></span>
+            <span>Netlify Serverless Aktif</span>
+          </div>
+          <p>Ditenagai arsitektur <strong>CrowLLM</strong> dengan animasi responsif & penyimpanan lokal otomatis.</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="workspace">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="open-sidebar-btn" class="icon-btn mobile-only" aria-label="Buka Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <div class="workspace-title">
+            <h2 id="current-chat-title">Percakapan Baru</h2>
+            <span class="subtitle">CrowLLM • High-Speed Inference</span>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button id="clear-history-btn" class="action-pill" title="Hapus semua riwayat">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span>Reset</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Chat Feed -->
+      <div id="chat-container" class="chat-container">
+        <!-- Empty / Welcome State -->
+        <div id="welcome-screen" class="welcome-screen">
+          <div class="welcome-glow"></div>
+          <div class="welcome-icon">GX</div>
+          <h3>Selamat datang di <span>GARPITX AI</span></h3>
+          <p>Asisten cerdas berbasis <strong>CrowLLM</strong>. Mulai percakapan atau pilih ide cepat di bawah ini:</p>
+          
+          <div class="prompt-grid">
+            <button class="prompt-card" data-prompt="Buatkan strategi konten kreator selama 30 hari dari nol agar cepat berkembang.">
+              <span class="card-icon">🚀</span>
+              <div class="card-text">
+                <strong>Strategi Konten 30 Hari</strong>
+                <span>Rencana pertumbuhan akun terstruktur</span>
+              </div>
+            </button>
+            <button class="prompt-card" data-prompt="Jelaskan cara kerja model bahasa besar (LLM) seperti CrowLLM dengan bahasa yang mudah dipahami.">
+              <span class="card-icon">🧠</span>
+              <div class="card-text">
+                <strong>Cara Kerja CrowLLM</strong>
+                <span>Penjelasan sederhana arsitektur AI</span>
+              </div>
+            </button>
+            <button class="prompt-card" data-prompt="Buatkan contoh kode REST API sederhana menggunakan Node.js dan Express lengkap dengan penjelasannya.">
+              <span class="card-icon">💻</span>
+              <div class="card-text">
+                <strong>Bantuan Pemrograman</strong>
+                <span>Generate kode bersih & terstruktur</span>
+              </div>
+            </button>
+            <button class="prompt-card" data-prompt="Bantu saya menyusun email penawaran kerja sama bisnis yang profesional dan persuasif.">
+              <span class="card-icon">✍️</span>
+              <div class="card-text">
+                <strong>Penulisan Profesional</strong>
+                <span>Draft email & dokumen bisnis</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages List -->
+        <div id="messages-list" class="messages-list"></div>
+      </div>
+
+      <!-- Floating Input Composer -->
+      <div class="composer-wrapper">
+        <form id="chat-form" class="composer-box">
+          <textarea
+            id="user-input"
+            rows="1"
+            placeholder="Tanyakan apa saja pada GARPITX AI..."
+            required
+          ></textarea>
+          <button type="submit" id="send-btn" class="send-btn" aria-label="Kirim Pesan">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </form>
+        <div class="composer-hint">
+          Tekan <kbd>Enter</kbd> untuk mengirim • <kbd>Shift + Enter</kbd> untuk baris baru
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Tersalin ke clipboard!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
